@@ -19,13 +19,13 @@ io.on('connection', (socket) => {
         socket.emit(mensaje);
         console.log("en teoría envío algo...");
     }); */
-    socket.on('new-message', (message) => {
+    socket.on('new-message', (message, id) => {
     	console.log("mensaje en socke on");
         console.log(message);
         console.log("usuario en el socket ");
         console.log(socket.username);
-        message = socket.username +": "+  message;
-        io.emit('new-message', message);  
+        message = socket.username +":"+  message + ":" + socket.id;
+        io.emit('new-message', message, id);  
     });
 
     //Intentando agregar usuario:
