@@ -9,8 +9,8 @@ const client = new MongoClient(url, {
 });
 
 module.exports = async () => {
-  // Conectamos al servidor
+  
   await client.connect();
-  console.log("connecion establecida");
-  return client.db(dbName); // retornamos la conexión con el nombre de la bd a usar
+  
+  return client.db(dbName); 
 };
