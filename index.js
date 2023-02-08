@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
     socket.on('new-message', (message) => {
         message = socket.username +":"+  message + ":" + socket.id;
         io.emit('new-message', message);  
-        console.log(message);
+        
     });
 
     socket.on('add user', (username) => {
@@ -27,23 +27,39 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('user joined', {
             username: socket.username,
         });
-        console.log("usuario agregado ");
+        console.log("user  added ");
       
     });
    
 
 });
+app.post("/addUser", async(req, res)=>{
+    var response = {"status":"user created"};
+    try{
+        console.log("req");
+        console.log(req);
+        const db = await connection();
+        await db.collection("userNotification").insertOne(req);
+        
+        console.log(response);
+        
+        res.status(200).json(response);
+        console.log("after of setting res");
+    }catch(error) {
+        console.log("error creating user");
+        console.log(error);
+        res.status(500).json({"status":"error adding user"});
+    }
+});
+
 app.get("/history", async(req, res)=>{
-    console.log("be confirmar!")
+    
     var response = [];
     try{
-        console.log("ejecutar esperar coneccion ...");
-        console.log("solicitiud :");
         
         const db = await connection();
-        var response = await db.collection("carta").find({}).toArray();
+        var response = await db.collection("userNotification").find({}).sort({ creationDate: -1 }).toArray();
         
-        console.log("carta");
         console.log(response);
         
         res.status(200).json(response);
